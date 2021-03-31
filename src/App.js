@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import TodoListTemplate from './components/TodoListTemplate';
 import Form from './components/Form';
 import TodoItemList from './components/TodoItemList';
+import Palette from './components/Palette';
 
-
+const colors = ['#343a40', '#f03e3e', '#12b886', '#228ae6']
 class App extends Component {
 
   id = 3 // 이미 0,1,2 가 존재하므로 3으로 설정
@@ -11,10 +12,11 @@ class App extends Component {
   state = {
     input: '',
     todos: [
-      { id: 0, text: ' 리액트 소개', checked: false },
-      { id: 1, text: ' 리액트 소개', checked: true },
-      { id: 2, text: ' 리액트 소개', checked: false }
-    ]
+      { id: 0, text: ' 리액트 소개', checked: false, color: colors[0]},
+      { id: 1, text: ' 리액트 소개', checked: true, color: colors[0] },
+      { id: 2, text: ' 리액트 소개', checked: false, color: colors[0] }
+    ], 
+    color: '#343a40'
   }
 
   handleToggle = (id) => {
@@ -51,14 +53,15 @@ class App extends Component {
   }
 
   handleCreate = () => {
-    const { input, todos } = this.state;
+    const { input, todos, color } = this.state;
     this.setState({
       input: '', // 인풋 비우고
       // concat 을 사용하여 배열에 추가
       todos: todos.concat({
         id: this.id++,
         text: input,
-        checked: false
+        checked: false, 
+        color: color
       })
     });
   }
@@ -70,25 +73,38 @@ class App extends Component {
     }
   }
 
+  handleColorSelected = (color) => {
+    console.log('handleColorSelected', color)
+    this.setState({
+      color: color
+    })
+  }
+
   render() {
-    const { input, todos } = this.state;
+    const { input, todos, color } = this.state;
     const {
       handleChange,
       handleCreate,
       handleKeyPress,
       handleToggle,
-      handleRemove
+      handleRemove,
+      handleColorSelected
     } = this;
 
     return (
-      <TodoListTemplate form={(
-        <Form 
+      <TodoListTemplate
+       form={(<Form 
           value={input}
+          color={color}
           onKeyPress={handleKeyPress}
           onChange={handleChange}
           onCreate={handleCreate}
-        />
-      )}>
+        />)}
+      color={(<Palette 
+        colors={colors} 
+        selected={color} 
+        onSelect={handleColorSelected}/>
+        )}>
         <TodoItemList todos={todos} onToggle={handleToggle} onRemove={handleRemove}/>
       </TodoListTemplate>
     );

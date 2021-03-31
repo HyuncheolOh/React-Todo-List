@@ -19,6 +19,11 @@
     padding: 1rem;
     border-bottom: 1px solid #22b8cf;
   }
+
+  .color-wrapper {
+    padding: 1rem;
+    background: #ccc
+  }
   
   .todos-wrapper {
     min-height: 5rem;
